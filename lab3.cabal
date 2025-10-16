@@ -27,7 +27,6 @@ library
   exposed-modules:
       Config
       Console
-      Lib
       MathBlock
       Parse
   other-modules:
