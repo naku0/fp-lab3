@@ -105,6 +105,6 @@ main = hspec $ do
          in approxEqual (linearInt sorted x) (newtonInt sorted x) && approxEqual (linearInt sorted x) (lagrangeInt sorted x)
 
     prop "linear exact for linear functions" $ \a b x ->
-      let f = \t -> a * t + b
+      let f t = a * t + b
           points = [(-1, f (-1)), (0, f 0), (1, f 1)]
        in approxEqual (linearInt points x) (f x)
