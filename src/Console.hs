@@ -6,7 +6,7 @@ where
 
 import Config (Config (..), defaultConf)
 import Control.Monad (when)
-import MathBlock (InterpolationMethod (..), Point, linearInt)
+import MathBlock (InterpolationMethod (..), Point, linearInt, newtonInt, lagrangeInt)
 import Numeric (showFFloat)
 import Parse (parsePoint, parseRead)
 import System.IO (hFlush, stdout)
@@ -55,7 +55,7 @@ consoleRead conf points = do
   hFlush stdout
   input <- getLine
   case input of
-    "EOF" -> finishComputation
+    "EOF"-> finishComputation
     _ -> case parsePoint input of
       Just new -> do
         let newPoints = new : points
@@ -73,19 +73,21 @@ interpolateStream _ [] = []
 interpolateStream conf points@(newPoint : prevPoints) =
   case prevPoints of
     [] -> [newPoint]
-    _ ->
+    (prevPoint : _) ->
       let stepVal = step conf
-          startX = minimum (map fst points)
+          startX = fst prevPoint
           endX = fst newPoint
-          interpolatedXs = takeWhile (<= endX) [startX, startX + stepVal ..]
+          interpolatedXs
+            | startX < endX = takeWhile (<= endX) [startX, startX + stepVal ..]
+            | otherwise = takeWhile (<= startX) [endX, endX + stepVal ..]
        in [(x, processComputation conf points x) | x <- interpolatedXs]
 
 formatPoint :: Config -> Point -> String
-formatPoint conf (x, y) = show (method conf) <> ": " <> showFFloat (Just 1) x "" <> " " <> showFFloat (Just 1) y ""
+formatPoint conf (x, y) = show (method conf) <> ": (" <> showFFloat (Just 2) x "" <> "; " <> showFFloat (Just 2) y "" <> ")"
 
 processComputation :: Config -> [Point] -> Double -> Double
 processComputation conf points x =
   case method conf of
     Linear -> linearInt points x
-    Newton -> linearInt points x
-    Lagrange -> linearInt points x
+    Newton -> newtonInt points x
+    Lagrange -> lagrangeInt points x

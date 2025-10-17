@@ -39,37 +39,25 @@ findSegment points x =
 newtonInt :: [Point] -> Double -> Double
 newtonInt points x =
   let sortedPoints = sortOn fst points
+      n = length sortedPoints
       xs = map fst sortedPoints
-      dividedDiffs = computeDividedDifferences sortedPoints
-   in newtonPolynomial xs dividedDiffs x
+      diffTable = buildDiffTable sortedPoints
+      coeffs = map head diffTable
+   in sum [ coeffs !! k * product [x - xs !! j | j <- [0..k-1]]
+          | k <- [0..n-1] ]
 
--- Вычисление разделенных разностей (исправленная версия)
-computeDividedDifferences :: [Point] -> [Double]
-computeDividedDifferences points =
-  let n = length points
-      xs = map fst points
+buildDiffTable :: [Point] -> [[Double]]
+buildDiffTable points =
+  let xs = map fst points
       ys = map snd points
-   in head $ newtonDD xs ys (n - 1)
-  where
-    newtonDD :: [Double] -> [Double] -> Int -> [[Double]]
-    newtonDD _ ys 0 = [ys]
-    newtonDD xs ys k =
-      let prevDD = head $ newtonDD xs ys (k - 1)
-          newDD =
-            [ (prevDD !! (j + 1) - prevDD !! j) / (xs !! (j + k) - xs !! j)
-              | j <- [0 .. length prevDD - 2]
-            ]
-       in newDD : newtonDD xs ys (k - 1)
-
--- Полином Ньютона
-newtonPolynomial :: [Double] -> [Double] -> Double -> Double
-newtonPolynomial xs diffs x =
-  sum $
-    zipWith
-      (\diff i -> diff * product [x - xs !! j | j <- [0 .. i - 1]])
-      diffs
-      [0 ..]
-
+      n = length points
+  in reverse $ foldl (\table k ->
+        let prevLevel = head table
+            newLevel = [ (prevLevel !! (i+1) - prevLevel !! i) / 
+                         (xs !! (i+k) - xs !! i)
+                       | i <- [0..length prevLevel - 2] ]
+        in newLevel : table
+      ) [ys] [1..n-1]
 {-===================-}
 
 lagrangeInt :: [Point] -> Double -> Double
