@@ -26,14 +26,22 @@ linearInt points x =
             [single] -> snd single
             (p1 : p2 : _) ->
               if x < fst p1
-                then linearInt [p1, p2] x
-                else linearInt [last (init sorted), last sorted] x
+                then extrapolateLeft p1 p2 x
+                else extrapolateRight (last (init sorted)) (last sorted) x
 
 findSegment :: [Point] -> Double -> Maybe (Point, Point)
 findSegment points x =
   let sorted = sortOn fst points
       segments = zip sorted (tail sorted)
    in find (\((x1, _), (x2, _)) -> x1 <= x && x <= x2) segments
+
+extrapolateLeft :: Point -> Point -> Double -> Double
+extrapolateLeft (x1, y1) (x2, y2) x =
+  y1 + (y2 - y1) * (x - x1) / (x2 - x1)
+
+extrapolateRight :: Point -> Point -> Double -> Double
+extrapolateRight (x1, y1) (x2, y2) x =
+  y1 + (y2 - y1) * (x - x1) / (x2 - x1)
 
 {-===================-}
 newtonInt :: [Point] -> Double -> Double

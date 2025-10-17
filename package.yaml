@@ -57,3 +57,5 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - lab3
+    - hspec
+    - QuickCheck
