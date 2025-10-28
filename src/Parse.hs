@@ -13,7 +13,7 @@ parseRead [] config = config
 parseRead ("--method" : x : xs) config =
   case parseMethod x of
     Just method' -> parseRead xs config {method = method'}
-    Nothing -> error $ "There's no such method as" <> x <> "\n" <> "Available methods: linear, newton, lagrange"
+    Nothing -> error $ "There's no such method as" <> x <> "\n" <> "Available methods: linear, newton, lagrange, newton-lagrange, linear-newton, linear-lagrange"
 parseRead ("--n" : x : xs) config =
   case parsePoints x of
     Just n -> parseRead xs config {startPoints = n}
@@ -32,6 +32,24 @@ parseMethod s = case map toLower s of
   "new" -> Just Newton
   "lagrange" -> Just Lagrange
   "lag" -> Just Lagrange
+  "newton-lagrange" -> Just NewtonLagrange
+  "lagrange-newton" -> Just NewtonLagrange
+  "new-lag" -> Just NewtonLagrange
+  "newlag" -> Just NewtonLagrange
+  "lag-new" -> Just NewtonLagrange
+  "lagnew" -> Just NewtonLagrange
+  "linear-newton" -> Just LinearNewton
+  "newton-linear" -> Just LinearNewton
+  "linnew" -> Just LinearNewton
+  "lin-new" -> Just LinearNewton
+  "newlin" -> Just LinearNewton
+  "new-lin" -> Just LinearNewton
+  "linear-lagrange" -> Just LinearLagrange
+  "lin-lag" -> Just LinearLagrange
+  "linlag" -> Just LinearLagrange
+  "lagrange-linear" -> Just LinearLagrange
+  "lag-lin" -> Just LinearLagrange
+  "lin-lag" -> Just LinearLagrange
   _ -> Nothing
 
 parsePoints :: String -> Maybe Int

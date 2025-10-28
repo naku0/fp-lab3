@@ -6,7 +6,7 @@ where
 
 import Config (Config (..), defaultConf)
 import Control.Monad (when)
-import MathBlock (InterpolationMethod (..), Point, linearInt, newtonInt, lagrangeInt)
+import MathBlock (InterpolationMethod (..), Point, lagrangeInt, linearInt, linearLagrangeInt, linearNewtonInt, newtonInt, newtonLagrangeInt)
 import Numeric (showFFloat)
 import Parse (parsePoint, parseRead)
 import System.IO (hFlush, stdout)
@@ -55,7 +55,8 @@ consoleRead conf points = do
   hFlush stdout
   input <- getLine
   case input of
-    "EOF"-> finishComputation
+    "EOF" -> finishComputation
+    "eof" -> finishComputation
     _ -> case parsePoint input of
       Just new -> do
         let newPoints = new : points
@@ -91,3 +92,6 @@ processComputation conf points x =
     Linear -> linearInt points x
     Newton -> newtonInt points x
     Lagrange -> lagrangeInt points x
+    LinearLagrange -> linearLagrangeInt points x
+    LinearNewton -> linearNewtonInt points x
+    NewtonLagrange -> newtonLagrangeInt points x

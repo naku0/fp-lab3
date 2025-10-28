@@ -26,5 +26,4 @@ jobs:
               run: stack exec -- hlint .
               
             - name: Check formatting with ormolu
-              run: |
-                find . -name "*.hs" -exec stack exec -- ormolu --mode check {} \;
+              run: find src app test -name "*.hs" -exec stack exec -- ormolu --mode check {} \;
