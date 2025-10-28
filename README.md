@@ -71,7 +71,9 @@ NewtonLagrange: (0.80; 0.80)
 linearInt :: [Point] -> Double -> Double
 ```
 in [`src/Mathblock.hs`](https://github.com/naku0/fp-lab3/blob/main/src/MathBlock.hs)
+
 **__________________**
+
 
  - настройки алгоритма интерполяции и выводимых данных должны задаваться через аргументы командной строки:
 
@@ -86,6 +88,7 @@ in [`src/Mathblock.hs`](https://github.com/naku0/fp-lab3/blob/main/src/MathBlock
 parseRead :: [String] -> Config -> Config
 ```
 in [`src/Parse.hs`](https://github.com/naku0/fp-lab3/blob/main/src/Parse.hs)
+
 **__________________**
 
  - входные данные должны задаваться в текстовом формате на подобии ".csv" (к примеру x;y\n или x\ty\n) и подаваться на стандартный ввод, входные данные должны быть отсортированы по возрастанию x;
@@ -98,7 +101,9 @@ in [`src/Parse.hs`](https://github.com/naku0/fp-lab3/blob/main/src/Parse.hs)
 in [`src/Parse.hs`](https://github.com/naku0/fp-lab3/blob/main/src/Parse.hs)
 
 а также точки сортируются по возрастанию x в методах интерполяции in [`src/Mathblock.hs`](https://github.com/naku0/fp-lab3/blob/main/src/MathBlock.hs)
+
 **__________________**
+
  - выходные данные должны подаваться на стандартный вывод;
 
  - программа должна работать в потоковом режиме (пример -- cat | grep 11), это значит, что при запуске программы она должна ожидать получения данных на стандартный ввод, и, по мере получения достаточного количества данных, должна выводить рассчитанные точки в стандартный вывод;
